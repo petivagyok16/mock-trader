@@ -40,11 +40,11 @@ jobs:
       # run tests!
       - run: mvn integration-test
   deploy:
-        docker:
-              - image: buildpack-deps:trusty
-        steps:
-          - checkout
-          - run:
-              name: Deploy Master to Heroku
-              command: |
-                git push https://heroku:f28779d3-6548-4b7b-985d-0fc251f33cc0@git.heroku.com/mock-trader.git master
+      docker:
+            - image: buildpack-deps:trusty
+      steps:
+        - checkout
+        - run:
+            name: Deploy Master to Heroku
+            command: |
+              git push https://heroku:f28779d3-6548-4b7b-985d-0fc251f33cc0@git.heroku.com/mock-trader.git master
