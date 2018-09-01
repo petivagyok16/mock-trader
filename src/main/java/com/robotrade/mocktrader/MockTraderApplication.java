@@ -11,10 +11,13 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 @SpringBootApplication
 @EnableScheduling
 public class MockTraderApplication {
+
+	static RabbitTemplate rabbitTemplate;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MockTraderApplication.class, args);
@@ -40,6 +43,7 @@ public class MockTraderApplication {
 		//Set up the listener
 		SimpleMessageListenerContainer container =
 						new SimpleMessageListenerContainer(connectionFactory);
+
 		Object listener = new Object() {
 			public void handleMessage(String foo) {
 				System.out.println(foo);
@@ -52,13 +56,18 @@ public class MockTraderApplication {
 		container.setQueueNames("myQueue");
 		container.start();
 
-		RabbitTemplate template = new RabbitTemplate(connectionFactory);
-		template.convertAndSend("myExchange", "foo.bar", "Hello CloudAMQP!");
-		try{
-			Thread.sleep(1000);
-		} catch(InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
-		container.stop();
+		MockTraderApplication.rabbitTemplate = new RabbitTemplate(connectionFactory);
+
+//		try{
+//			Thread.sleep(1000);
+//		} catch(InterruptedException e) {
+//			Thread.currentThread().interrupt();
+//		}
+//		container.stop();
+	}
+
+	@Scheduled(initialDelay = 1000, fixedDelay = 5000)
+	public void sendMessages(RabbitTemplate template) {
+		MockTraderApplication.rabbitTemplate.convertAndSend("myExchange", "foo.bar", "Hello CloudAMQP!");
 	}
 }
