@@ -67,7 +67,7 @@ public class MockTraderApplication {
 	}
 
 	@Scheduled(initialDelay = 1000, fixedDelay = 5000)
-	public void sendMessages(RabbitTemplate template) {
+	public void sendMessages() {
 		MockTraderApplication.rabbitTemplate.convertAndSend("myExchange", "foo.bar", "Hello CloudAMQP!");
 	}
 }
