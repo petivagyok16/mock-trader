@@ -57,7 +57,7 @@ public class MockTraderApplication {
 		container.start();
 
 		MockTraderApplication.rabbitTemplate = new RabbitTemplate(connectionFactory);
-
+		MockTraderApplication.sendMessages();
 //		try{
 //			Thread.sleep(1000);
 //		} catch(InterruptedException e) {
@@ -66,8 +66,8 @@ public class MockTraderApplication {
 //		container.stop();
 	}
 
-	@Scheduled(initialDelay = 1000, fixedDelay = 5000)
-	public void sendMessages() {
+//	@Scheduled(initialDelay = 1000, fixedDelay = 5000)
+	public static void sendMessages() {
 		MockTraderApplication.rabbitTemplate.convertAndSend("myExchange", "foo.bar", "Hello CloudAMQP!");
 	}
 }
