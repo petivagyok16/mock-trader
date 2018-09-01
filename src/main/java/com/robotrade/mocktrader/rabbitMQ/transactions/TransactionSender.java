@@ -27,7 +27,7 @@ public class TransactionSender {
 		this.template = cloudRabbitTemplate;
 	}
 
-	@Scheduled(initialDelay = 500, fixedDelay = 5000)
+//	@Scheduled(initialDelay = 500, fixedDelay = 5000)
 	public void send() {
 		Transaction transaction = new Transaction(this.random.nextInt(3-1)+1, 3000.0*this.random.nextDouble()+200.0, 800.0*this.random.nextDouble()+30.0, Instant.now().getEpochSecond());
 		log.info("*** TRANSACTION TO SEND: *** ");
