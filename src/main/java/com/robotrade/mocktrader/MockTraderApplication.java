@@ -40,24 +40,24 @@ public class MockTraderApplication {
 		admin.declareBinding(
 						BindingBuilder.bind(queue).to(exchange).with("foo.*"));
 
-		//Set up the listener
-		SimpleMessageListenerContainer container =
-						new SimpleMessageListenerContainer(connectionFactory);
-
-		Object listener = new Object() {
-			public void handleMessage(String foo) {
-				System.out.println(foo);
-			}
-		};
-
-		//Send a message
-		MessageListenerAdapter adapter = new MessageListenerAdapter(listener);
-		container.setMessageListener(adapter);
-		container.setQueueNames("myQueue");
-		container.start();
+//		//Set up the listener
+//		SimpleMessageListenerContainer container =
+//						new SimpleMessageListenerContainer(connectionFactory);
+//
+//		Object listener = new Object() {
+//			public void handleMessage(String foo) {
+//				System.out.println(foo);
+//			}
+//		};
+//
+//		//Send a message
+//		MessageListenerAdapter adapter = new MessageListenerAdapter(listener);
+//		container.setMessageListener(adapter);
+//		container.setQueueNames("myQueue");
+//		container.start();
 
 		MockTraderApplication.rabbitTemplate = new RabbitTemplate(connectionFactory);
-		MockTraderApplication.sendMessages();
+//		MockTraderApplication.sendMessages();
 //		try{
 //			Thread.sleep(1000);
 //		} catch(InterruptedException e) {
@@ -66,7 +66,7 @@ public class MockTraderApplication {
 //		container.stop();
 	}
 
-//	@Scheduled(initialDelay = 1000, fixedDelay = 5000)
+	@Scheduled(initialDelay = 2000, fixedDelay = 5000)
 	public static void sendMessages() {
 		MockTraderApplication.rabbitTemplate.convertAndSend("myExchange", "foo.bar", "Hello CloudAMQP!");
 	}
