@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TransactionConfig {
 
-	@Bean
-	public TopicExchange roboExchange() {
-		return new TopicExchange(RabbitConstants.ROBO_TOPIC_EXCHANGE_NAME);
-	}
-
-	@Bean
-	public TransactionSender transactionSender() {
-		return new TransactionSender();
-	}
+//	@Bean
+//	public TopicExchange roboExchange() {
+//		return new TopicExchange(RabbitConstants.ROBO_TOPIC_EXCHANGE_NAME);
+//	}
+//
+//	@Bean
+//	public TransactionSender transactionSender() {
+//		return new TransactionSender();
+//	}
 
 }

@@ -14,12 +14,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/transaction")
 public class TransactionController {
 
-	@Autowired
-	TransactionSender transactionSender;
+//	@Autowired
+//	TransactionSender transactionSender;
 
-	public TransactionController(TransactionSender transactionSender) {
-		this.transactionSender = transactionSender;
-	}
+//	public TransactionController(TransactionSender transactionSender) {
+//		this.transactionSender = transactionSender;
+//	}
 
 	@PostMapping("/send")
 	public Mono<ResponseEntity> sendTransactionData(@RequestBody Transaction transaction) {
