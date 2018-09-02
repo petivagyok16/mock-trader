@@ -6,7 +6,6 @@ import com.robotrade.mocktrader.rabbitMQ.RabbitConstants;
 import com.robotrade.mocktrader.rabbitMQ.models.Transaction;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,9 +26,10 @@ public class TransactionSender {
 		this.template = cloudRabbitTemplate;
 	}
 
-//	@Scheduled(initialDelay = 500, fixedDelay = 5000)
+	@Scheduled(initialDelay = 500, fixedDelay = 60000)
 	public void send() {
 		Transaction transaction = new Transaction(this.random.nextInt(3-1)+1, 3000.0*this.random.nextDouble()+200.0, 800.0*this.random.nextDouble()+30.0, Instant.now().getEpochSecond());
+//		Transaction transaction = new Transaction(this.random.nextInt(3-1)+1, 600.00, 300.00, Instant.now().getEpochSecond());
 		log.info("*** TRANSACTION TO SEND: *** ");
 		log.info(transaction.toString());
 
@@ -37,7 +37,7 @@ public class TransactionSender {
 
 		try {
 			String marshaledTransaction = mapper.writeValueAsString(transaction);
-			template.convertAndSend(RabbitConstants.ROBO_TOPIC_EXCHANGE_NAME, RabbitConstants.TRANSACTION_ROUTING_KEY, marshaledTransaction);
+			template.convertAndSend(RabbitConstants.ROBO_TRANSACTION_EXCHANGE_NAME, RabbitConstants.TRANSACTION_ROUTING_KEY, marshaledTransaction);
 		} catch (JsonProcessingException e) {
 			log.info(" --- Error during converting POJO to JSON --- ");
 			e.printStackTrace();

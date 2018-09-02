@@ -20,7 +20,12 @@ public class UsersCapitalClient {
 	@Autowired
 	private DirectExchange exchange;
 
-//	@Scheduled(fixedDelay = 1000, initialDelay = 500)
+	public UsersCapitalClient(RabbitTemplate cloudRabbitTemplate, DirectExchange usersCapitalExchange) {
+		this.template = cloudRabbitTemplate;
+		this.exchange = usersCapitalExchange;
+	}
+
+//	@Scheduled(fixedDelay = 5000, initialDelay = 500)
 	public void requestAllUsersCapital() {
 		ObjectMapper mapper = new ObjectMapper();
 		String response = (String) template.convertSendAndReceive(this.exchange.getName(), RabbitConstants.USER_CAPITAL_REQUEST_ROUTING_KEY, "Requesting users capital!");
