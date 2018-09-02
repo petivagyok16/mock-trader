@@ -18,17 +18,17 @@ public class UsersCapitalClient {
 	private RabbitTemplate template;
 
 	@Autowired
-	private DirectExchange exchange;
+	private DirectExchange usersCapitalExchange;
 
 	public UsersCapitalClient(RabbitTemplate cloudRabbitTemplate, DirectExchange usersCapitalExchange) {
 		this.template = cloudRabbitTemplate;
-		this.exchange = usersCapitalExchange;
+		this.usersCapitalExchange = usersCapitalExchange;
 	}
 
 	@Scheduled(fixedDelay = 65000, initialDelay = 1000)
 	public void requestAllUsersCapital() {
 		ObjectMapper mapper = new ObjectMapper();
-		String response = (String) template.convertSendAndReceive(this.exchange.getName(), RabbitConstants.USER_CAPITAL_REQUEST_ROUTING_KEY, "Requesting users capital!");
+		String response = (String) template.convertSendAndReceive(this.usersCapitalExchange.getName(), RabbitConstants.USER_CAPITAL_REQUEST_ROUTING_KEY, "Requesting users capital!");
 		log.info(" *** USERS CAPITAL RECEIVED: *** ");
 		log.info(response);
 
