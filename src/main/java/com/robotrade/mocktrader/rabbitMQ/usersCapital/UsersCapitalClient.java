@@ -25,7 +25,7 @@ public class UsersCapitalClient {
 		this.exchange = usersCapitalExchange;
 	}
 
-//	@Scheduled(fixedDelay = 5000, initialDelay = 500)
+	@Scheduled(fixedDelay = 65000, initialDelay = 1000)
 	public void requestAllUsersCapital() {
 		ObjectMapper mapper = new ObjectMapper();
 		String response = (String) template.convertSendAndReceive(this.exchange.getName(), RabbitConstants.USER_CAPITAL_REQUEST_ROUTING_KEY, "Requesting users capital!");
