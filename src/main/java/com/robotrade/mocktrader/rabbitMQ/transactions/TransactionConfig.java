@@ -18,7 +18,7 @@ public class TransactionConfig {
 	}
 
 	@Bean
-	public TopicExchange roboExchange() {
+	public TopicExchange transactionExchange() {
 		TopicExchange topicExchange = new TopicExchange(RabbitConstants.ROBO_TRANSACTION_EXCHANGE_NAME);
 		this.cloudAMPQAdmin.declareExchange(topicExchange);
 		return topicExchange;
