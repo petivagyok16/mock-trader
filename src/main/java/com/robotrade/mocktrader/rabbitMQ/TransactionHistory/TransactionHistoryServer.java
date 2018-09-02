@@ -11,7 +11,7 @@ import java.util.Collections;
 @Slf4j
 class TransactionHistoryServer {
 
-	@RabbitListener(queues = RabbitConstants.TRANSACTION_HISTORY_QUEUE_REQUEST_NAME)
+	@RabbitListener(queues = RabbitConstants.TRANSACTION_HISTORY_QUEUE_REQUEST_NAME, containerFactory = "rabbitListenerContainerFactory")
 	private String sendTransactionHistory(String message) {
 		TransactionHistoryMock mock = new TransactionHistoryMock();
 		log.info("Sending Transaction History!");
