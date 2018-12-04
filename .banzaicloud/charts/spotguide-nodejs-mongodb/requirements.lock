@@ -1,0 +1,12 @@
+dependencies:
+- name: pipeline-cluster-monitor
+  repository: http://kubernetes-charts.banzaicloud.com/branch/master
+  version: 0.1.11
+- name: pipeline-cluster-ingress
+  repository: http://kubernetes-charts.banzaicloud.com/branch/master
+  version: 0.0.6
+- name: mongodb
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 4.8.3
+digest: sha256:2cdcfc41c27af53204da4488d214324053c8db657f694fabc6fc2ca22b156697
+generated: 2018-11-09T11:29:44.331845+01:00

@@ -1,0 +1,140 @@
+pipeline:
+  create_cluster:
+    image: banzaicloud/ci-pipeline-client:0.6
+    cluster:
+      name: colin014i9xs
+      location: us-central1-a
+      cloud: google
+      secretId: b37e586859e09fc1c3643fb6620fdd9eea1a261f36da0c5290a0cdc908e8f95b
+      secretName: ""
+      profileName: ""
+      postHooks:
+        InstallLogging:
+          bucketName: colin-ark-bucket
+          secretId: b37e586859e09fc1c3643fb6620fdd9eea1a261f36da0c5290a0cdc908e8f95b
+        InstallMonitoring: {}
+      properties:
+        gke:
+          nodeVersion: "1.10"
+          nodePools:
+            pool1:
+              autoscaling: true
+              minCount: 2
+              maxCount: 3
+              count: 2
+              instanceType: n1-standard-1
+              preemptible: true
+            system:
+              autoscaling: true
+              minCount: 1
+              maxCount: 2
+              count: 1
+              instanceType: n1-standard-2
+          master:
+            version: "1.10"
+          projectId: colin-banzai-project
+    action: EnsureCluster
+  test:
+    image: node:10-slim
+    commands:
+    - npm ci
+    - npm test
+  build_image:
+    dockerfile: Dockerfile
+    image: plugins/docker
+    repo: '{{ .DRONE_REPO }}'
+    secretFrom:
+      DOCKER_PASSWORD:
+        keyRef: password
+        name: spotguide-spring-mysql-root
+      DOCKER_USERNAME:
+        keyRef: username
+        name: spotguide-spring-mysql-root
+    tags: '{{ trunc 7 .DRONE_COMMIT_SHA }}'
+  package_application:
+    when:
+      branch:
+        include:
+        - master
+    image: lachlanevenson/k8s-helm:latest
+    commands:
+    - helm init -c
+    - helm repo add banzaicloud-stable http://kubernetes-charts.banzaicloud.com/branch/master
+    - helm package ./.banzaicloud/charts/spotguide-nodejs-mongodb
+  install_mongodb_user_secret:
+    when:
+      branch:
+        include:
+        - master
+    image: banzaicloud/ci-pipeline-client:0.6
+    action: InstallSecret
+    clusterSecret:
+      name: '{{ .DRONE_REPO_NAME }}-mongodb'
+      namespace: default
+      merge: true
+      spec:
+      - name: mongodb-username
+        source: username
+      - name: mongodb-password
+        source: password
+  install_mongodb_root_secret:
+    when:
+      branch:
+        include:
+        - master
+    image: banzaicloud/ci-pipeline-client:0.6
+    action: InstallSecret
+    clusterSecret:
+      name: '{{ .DRONE_REPO_NAME }}-mongodb'
+      namespace: default
+      merge: true
+      spec:
+      - name: mongodb-root-password
+        source: password
+  install_mongodb_replica_set_key_secret:
+    when:
+      branch:
+        include:
+        - master
+    image: banzaicloud/ci-pipeline-client:0.6
+    action: InstallSecret
+    clusterSecret:
+      name: '{{ .DRONE_REPO_NAME }}-mongodb'
+      namespace: default
+      merge: true
+      spec:
+      - name: mongodb-replica-set-key
+        source: password
+  deploy_application:
+    action: EnsureDeployment
+    deployment:
+      name: ./spotguide-nodejs-mongodb-1.0.0.tgz
+      releaseName: '{{ .DRONE_REPO_NAME }}'
+      reuseValues: true
+      values:
+        application:
+          deployment:
+            image:
+              pullPolicy: Always
+              repository: '{{ .DRONE_REPO }}'
+              tag: '{{ trunc 7 .DRONE_COMMIT_SHA }}'
+          ingress:
+            annotations:
+              kubernetes.io/ingress.class: traefik
+              traefik.ingress.kubernetes.io/redirect-permanent: "true"
+              traefik.ingress.kubernetes.io/redirect-regex: ^http://(.*)
+              traefik.ingress.kubernetes.io/redirect-replacement: https://$1
+            hosts:
+            - app-{{.DRONE_REPO_NAME}}.{{.CLUSTER_NAME}}.{{.ORG_NAME}}.{{.DOMAIN_NAME}}
+        mongodb:
+          existingSecret: '{{ .DRONE_REPO_NAME }}-mongodb'
+          metrics:
+            enabled: true
+          mongodbDatabase: node-application
+          replicaSet:
+            enabled: true
+    image: banzaicloud/ci-pipeline-client:0.6
+    when:
+      branch:
+        include:
+        - master
