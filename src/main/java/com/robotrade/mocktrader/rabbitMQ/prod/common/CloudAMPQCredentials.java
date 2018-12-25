@@ -1,4 +1,4 @@
-package com.robotrade.mocktrader.rabbitMQ.common;
+package com.robotrade.mocktrader.rabbitMQ.prod.common;
 
 public class CloudAMPQCredentials {
 	public static final String HOSTNAME = "wolverine-01.rmq.cloudamqp.com";

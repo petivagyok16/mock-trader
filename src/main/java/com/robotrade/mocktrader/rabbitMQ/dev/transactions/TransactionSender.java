@@ -1,4 +1,4 @@
-package com.robotrade.mocktrader.rabbitMQ.transactions;
+package com.robotrade.mocktrader.rabbitMQ.dev.transactions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,10 +21,6 @@ public class TransactionSender {
 	private RabbitTemplate template;
 
 	private Random random = new Random();
-
-	public TransactionSender(RabbitTemplate cloudRabbitTemplate) {
-		this.template = cloudRabbitTemplate;
-	}
 
 	@Scheduled(initialDelay = 500, fixedDelay = 60000)
 	public void send() {

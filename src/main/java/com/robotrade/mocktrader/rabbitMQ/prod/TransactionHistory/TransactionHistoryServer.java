@@ -1,4 +1,4 @@
-package com.robotrade.mocktrader.rabbitMQ.TransactionHistory;
+package com.robotrade.mocktrader.rabbitMQ.prod.TransactionHistory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.robotrade.mocktrader.rabbitMQ.RabbitConstants;

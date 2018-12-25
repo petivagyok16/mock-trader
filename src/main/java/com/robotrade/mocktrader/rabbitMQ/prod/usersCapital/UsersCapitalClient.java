@@ -1,4 +1,4 @@
-package com.robotrade.mocktrader.rabbitMQ.usersCapital;
+package com.robotrade.mocktrader.rabbitMQ.prod.usersCapital;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.robotrade.mocktrader.rabbitMQ.RabbitConstants;
