@@ -22,7 +22,7 @@ public class TransactionSender {
 
 	private Random random = new Random();
 
-	@Scheduled(initialDelay = 500, fixedDelay = 60000)
+	@Scheduled(initialDelay = 500, fixedDelay = 15000)
 	public void send() {
 		Transaction transaction = new Transaction(this.random.nextInt(3-1)+1, 5000.0*this.random.nextDouble()+200.0, 800.0*this.random.nextDouble()+30.0, Instant.now().getEpochSecond());
 //		Transaction transaction = new Transaction(this.random.nextInt(3-1)+1, 600.00, 300.00, Instant.now().getEpochSecond());
