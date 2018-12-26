@@ -1,7 +1,6 @@
 package com.robotrade.mocktrader.rabbitMQ.dev.transactions;
 
 import com.robotrade.mocktrader.rabbitMQ.RabbitConstants;
-import com.robotrade.mocktrader.rabbitMQ.prod.transactions.TransactionSender;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
