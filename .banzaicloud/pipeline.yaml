@@ -40,7 +40,7 @@ pipeline:
     - npm ci
     - npm test
   build_image:
-    dockerfile: Dockerfile.dev
+    dockerfile: Dockerfile
     image: plugins/docker
     repo: '{{ .DRONE_REPO }}'
     secretFrom:
